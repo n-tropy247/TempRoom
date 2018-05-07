@@ -36,6 +36,7 @@ public class EscapeGame extends JFrame {
 
     private static int code;
     private static int option;
+    private static int rand;
     private static int turnCount;
     private static int x;
     private static int y;
@@ -73,9 +74,15 @@ public class EscapeGame extends JFrame {
     //storage for last pos
     private static int tempIntX;
     private static int tempIntY;
+    
+    //code
+    private static int digit0;
+    private static int digit1;
+    private static int digit2;
+    private static int digit3;
 
     //trophies
-    private static int trophyCount = 0;
+    private static int trophyCount;
     private static boolean trophy = false;
 
     private EscapeGame() {
@@ -158,8 +165,6 @@ public class EscapeGame extends JFrame {
 
         //storage for value of room
         int tempRoom = 1;
-
-        int rand;
         int randXCode;
         int randYCode;
 
@@ -167,10 +172,10 @@ public class EscapeGame extends JFrame {
         code = (int) (Math.random() * 8999) + 1000;
 
         //gets code digits for placement
-        int digit0 = code / 1000;
-        int digit1 = (code - digit0 * 1000) / 100;
-        int digit2 = (code - digit0 * 1000 - digit1 * 100) / 10;
-        int digit3 = (code - digit0 * 1000 - digit1 * 100 - digit2 * 10);
+        digit0 = code / 1000;
+        digit1 = (code - digit0 * 1000) / 100;
+        digit2 = (code - digit0 * 1000 - digit1 * 100) / 10;
+        digit3 = (code - digit0 * 1000 - digit1 * 100 - digit2 * 10);
 
         int deskCounter = 0;
 
@@ -306,21 +311,21 @@ public class EscapeGame extends JFrame {
                                 option = 1;
                             } else if (room[currentIntY][currentIntX] == 8) {
                                 if (rand <= 50) {
-                                    out.println("You tripped over a table in the dark. Hah.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou tripped over a table in the dark. Hah.");
                                 } else if (rand > 95) {
-                                    out.println("You run into a bookshelf and something falls off and hits you in the head. #rekt");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf and something falls off and hits you in the head. #rekt");
 
-                                    userInput = "exit";
+                                    input = "exit";
 
                                 } else {
-                                    out.println("You run into a bookshelf.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf.");
                                     currentIntY++;
                                 }
                             } else //moved into wall
                             {
-                                out.print("There's a wall there.\n");
+                                jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a wall there");
                             }
-                        } else if (userInput.equalsIgnoreCase("s") || userInput.equalsIgnoreCase("south") || userInput.equalsIgnoreCase("down")) {
+                        } else if (input.equalsIgnoreCase("s") || input.equalsIgnoreCase("south") || input.equalsIgnoreCase("down")) {
                             if (!(currentIntY + 1 >= (y - 1))) {
                                 if (runToggle && (currentIntY + 1 <= 0)) {
                                     currentIntY++;
@@ -331,42 +336,40 @@ public class EscapeGame extends JFrame {
                                 }
                             } else if (!(currentIntY + 1 > (y - 1))) {
                                 if (room[currentIntY + 1][currentIntX] == 2) {
-                                    out.print("There's a door there. Go through it?\n");
-                                    userInput = kbReader.next();
-                                    if ((userInput.equalsIgnoreCase("Y") || userInput.equalsIgnoreCase("yes"))) {
-                                        out.print("\nEnter the code: ");
-                                        userInputCode = kbReader.nextInt();
-                                        if (userInputCode == code) {
+                                    jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a door there. Go through it?\n");
+                                    if ((input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("yes"))) {
+                                        jtaDisplay.setText(jtaDisplay.getText() + "\n\nEnter the code: ");
+                                        if (Integer.valueOf(input) == code) {
                                             int NewLimX = (int) (Math.random() * (x + 2)) + x;
                                             int NewLimY = (int) (Math.random() * (y + 2)) + y;
                                             southDoor = true;
-                                            game(NewLimY, NewLimX);
-                                            userInput = "exit";
+                                            createRoom(NewLimY, NewLimX);
+                                            input = "exit";
                                         } else {
-                                            out.println("Lol, no");
+                                            jtaDisplay.setText(jtaDisplay.getText()+ "\nLol, no");
                                         }
                                     }
                                 } else {
-                                    out.print("There's a wall there.\n");
+                                    jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a wall there");
                                 }
                             } else {
-                                out.print("There's a wall there.\n");
+                                jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a wall there");
                             }
                             if (room[currentIntY][currentIntX] == 8) {
                                 if (rand <= 50) {
-                                    out.println("You tripped over a table in the dark. Hah.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou tripped over a table in the dark. Hah.");
                                 } else if (rand > 99) {
-                                    out.println("You run into a bookshelf and something falls off and hits you in the head. #rekt");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf and something falls off and hits you in the head. #rekt");
                                     for (int j = 0; j < turnCount; j++) {
-                                        userInput = "exit";
+                                        input = "exit";
                                     }
                                 } else {
-                                    out.println("You run into a bookshelf. Idiot.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf. Idiot.");
                                     currentIntY--;
                                 }
                             }
 
-                        } else if (userInput.equalsIgnoreCase("w") || userInput.equalsIgnoreCase("west") || userInput.equalsIgnoreCase("left")) {
+                        } else if (input.equalsIgnoreCase("w") || input.equalsIgnoreCase("west") || input.equalsIgnoreCase("left")) {
                             if (!(currentIntX - 1 <= 0)) //handles movement in X
                             {
                                 if (runToggle && (currentIntX - 1 <= 0)) {
@@ -377,40 +380,38 @@ public class EscapeGame extends JFrame {
                                     currentIntX--;
                                 }
                             } else if (!(currentIntX - 1 < 0) && room[currentIntY][currentIntX - 1] == 2) {
-                                out.print("There's a door there. Go through it?\n");
-                                userInput = kbReader.next();
-                                if ((userInput.equalsIgnoreCase("Y") || userInput.equalsIgnoreCase("yes"))) {
-                                    out.print("\nEnter the code: ");
-                                    userInputCode = kbReader.nextInt();
-                                    if (userInputCode == code) {
-                                        out.print("\nEnter the code: ");
+                                jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a door there. Go through it?\n");
+                                if ((input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("yes"))) {
+                                    jtaDisplay.setText(jtaDisplay.getText() + "\n\nEnter the code: ");
+                                    if (Integer.valueOf(input) == code) {
+                                        jtaDisplay.setText(jtaDisplay.getText() + "\n\nEnter the code: ");
                                         int NewLimX = (int) (Math.random() * (x + 2)) + x;
                                         int NewLimY = (int) (Math.random() * (y + 2)) + y;
                                         westDoor = true;
-                                        game(NewLimY, NewLimX);
-                                        userInput = "exit";
+                                        createRoom(NewLimY, NewLimX);
+                                        input = "exit";
                                     } else {
-                                        out.println("Lol, no");
+                                        jtaDisplay.setText(jtaDisplay.getText()+ "\nLol, no");
                                     }
                                 }
                             } else {
-                                out.print("There's a wall there.\n");
+                                jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a wall there");
                             }
                             if (room[currentIntY][currentIntX] == 8) {
                                 if (rand <= 50) {
-                                    out.println("You tripped over a table in the dark. Hah.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou tripped over a table in the dark. Hah.");
                                 } else if (rand > 95) {
-                                    out.println("You run into a bookshelf and something falls off and hits you in the head. #rekt");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf and something falls off and hits you in the head. #rekt");
                                     for (int j = 0; j < turnCount; j++) {
-                                        userInput = "exit";
+                                        input = "exit";
                                     }
                                 } else {
-                                    out.println("You run into a bookshelf. Idiot.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf. Idiot.");
                                     currentIntX++;
                                 }
                             }
 
-                        } else if (userInput.equalsIgnoreCase("e") || userInput.equalsIgnoreCase("east") || userInput.equalsIgnoreCase("right")) {
+                        } else if (input.equalsIgnoreCase("e") || input.equalsIgnoreCase("east") || input.equalsIgnoreCase("right")) {
                             if ((currentIntX + 1) < (x - 1)) {
                                 if (runToggle && (currentIntX + 1 <= 0)) {
                                     currentIntX++;
@@ -421,40 +422,38 @@ public class EscapeGame extends JFrame {
                                 }
                             } else if ((currentIntX + 1 >= (x - 2)) && room[currentIntY][currentIntX + 1] == 2) {
                                 {
-                                    out.print("There's a door there. Go through it?\n");
-                                    userInput = kbReader.next();
-                                    if ((userInput.equalsIgnoreCase("Y") || userInput.equalsIgnoreCase("yes"))) {
-                                        out.print("\nEnter the code: ");
-                                        userInputCode = kbReader.nextInt();
-                                        if (userInputCode == code) {
-                                            out.print("\nEnter the code: ");
+                                    jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a door there. Go through it?\n");
+                                    if ((input.equalsIgnoreCase("Y") || input.equalsIgnoreCase("yes"))) {
+                                        jtaDisplay.setText(jtaDisplay.getText() + "\n\nEnter the code: ");
+                                        if (Integer.valueOf(input) == code) {
+                                            jtaDisplay.setText(jtaDisplay.getText() + "\n\nEnter the code: ");
                                             int NewLimX = (int) (Math.random() * (x + 2)) + x;
                                             int NewLimY = (int) (Math.random() * (y + 2)) + y;
                                             eastDoor = true;
-                                            game(NewLimY, NewLimX);
-                                            userInput = "exit";
+                                            createRoom(NewLimY, NewLimX);
+                                            input = "exit";
                                         } else {
-                                            out.println("Lol, no");
+                                            jtaDisplay.setText(jtaDisplay.getText()+ "\nLol, no");
                                         }
                                     }
                                 }
                             } else if (currentIntX + 1 > (x - 2)) {
-                                out.print("There's a wall there.\n");
+                                jtaDisplay.setText(jtaDisplay.getText() + "\nThere's a wall there");
                             }
                             if (room[currentIntY][currentIntX] == 8) {
                                 if (rand <= 50) {
-                                    out.println("You tripped over a table in the dark. Hah.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou tripped over a table in the dark. Hah.");
                                 } else if (rand > 95) {
-                                    out.println("You run into a bookshelf and something falls off and hits you in the head. #rekt");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf and something falls off and hits you in the head. #rekt");
                                     for (int j = 0; j < turnCount; j++) {
-                                        userInput = "exit";
+                                        input = "exit";
                                     }
                                 } else {
-                                    out.println("You run into a bookshelf. Idiot.");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nYou run into a bookshelf. Idiot.");
                                     currentIntX--;
                                 }
                             }
-                        } else if (userInput.equalsIgnoreCase("search") || userInput.equalsIgnoreCase("look")) //allows player to check current and adjacent tiles
+                        } else if (input.equalsIgnoreCase("search") || input.equalsIgnoreCase("look")) //allows player to check current and adjacent tiles
                         {
                             int randomSearch = (int) (Math.random() * 100) + 1;
                             if (tempRoom != 1) //checks if tile isn't default
@@ -463,32 +462,32 @@ public class EscapeGame extends JFrame {
                                 {
                                     if (randomSearch >= 2) {
                                         if (tempRoom == 4) {
-                                            out.println("You see a number scrawled out on a note!\n" + digit0 + "\nOn the back it says, \"Millennials, amirite?\"");
+                                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYou see a number scrawled out on a note!\n" + digit0 + "\nOn the back it says, \"Millennials, amirite?\"");
                                         }
                                         if (tempRoom == 5) {
-                                            out.println("You see a number scrawled out on a note!\n" + digit1 + "\nOn the back it says, \"All about those Benjamins\"");
+                                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYou see a number scrawled out on a note!\n" + digit1 + "\nOn the back it says, \"All about those Benjamins\"");
                                         }
                                         if (tempRoom == 6) {
-                                            out.println("You see a number scrawled out on a note!\n" + digit2 + "\nOn the back it says, \"7 ate 9, who's next?\"");
+                                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYou see a number scrawled out on a note!\n" + digit2 + "\nOn the back it says, \"7 ate 9, who's next?\"");
                                         }
                                         if (tempRoom == 7) {
-                                            out.println("You see a number scrawled out on a note!\n" + digit3 + "\nOn the back it says, \"You\"");
+                                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYou see a number scrawled out on a note!\n" + digit3 + "\nOn the back it says, \"You\"");
                                         }
                                         tempRoom = 1; //resets tile once code is picked up
                                     } else if (randomSearch < 1) //trapped!
                                     {
-                                        out.print("You don't find anything. Maybe there's something elsewhere...\n");
-                                        out.print("Despite this, you get the strange feeling you're not getting out of here...");
+                                        jtaDisplay.setText(jtaDisplay.getText() + "\nYou don't find anything. Maybe there's something elsewhere..");
+                                        jtaDisplay.setText(jtaDisplay.getText() + "\nDespite this, you get the strange feeling you're not getting out of here...");
                                         tempRoom = 1; //no code
                                     } else {
-                                        out.println("Nothing nearby...");
+                                        jtaDisplay.setText(jtaDisplay.getText()+ "\nNothing nearby...");
                                     }
                                 } else if ((room[currentIntY + 1][currentIntX] != 1 && room[currentIntY + 1][currentIntX] != 9)
                                         || (room[currentIntY - 1][currentIntX] != 1 && room[currentIntY - 1][currentIntX] != 9)
                                         || (room[currentIntY][currentIntX + 1] != 1 && room[currentIntY][currentIntX + 1] != 9)
                                         || (room[currentIntY][currentIntX - 1] != 1 && room[currentIntY][currentIntX - 1] != 9)) //end of elseif for search
                                 {
-                                    out.println("There's something nearby..."
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nThere's something nearby..."
                                             + "\nCan't quite make it out.");
                                 } else if ((room[currentIntY + 1][currentIntX] != 1 && (room[currentIntY + 1][currentIntX] == 9 || room[currentIntY + 1][currentIntX] == 8))
                                         || (room[currentIntY - 1][currentIntX] != 1 && (room[currentIntY - 1][currentIntX] == 9 || room[currentIntY - 1][currentIntX] == 8))
@@ -496,65 +495,65 @@ public class EscapeGame extends JFrame {
                                         || (room[currentIntY][currentIntX - 1] != 1 && (room[currentIntY][currentIntX - 1] == 9 || room[currentIntY][currentIntX - 1] == 8))) {
                                     int randomItemSearch = (int) (Math.random() * 100) + 1;
                                     if (randomItemSearch <= 95) {
-                                        out.println("Nothing nearby...");
+                                        jtaDisplay.setText(jtaDisplay.getText()+ "\nNothing nearby...");
                                     }
                                     if (randomItemSearch == 100 && trophy) {
-                                        out.println("You got a trophy. Wow.");
+                                        jtaDisplay.setText(jtaDisplay.getText()+ "\nYou got a trophy. Wow.");
                                         trophy = false;
                                     } else if (randomItemSearch > 95 && randomItemSearch <= 99) {
-                                        out.println("In your greed, you forgot that the devs are mean and this game is unforgiving. The object you were searching in has collapsed and fell on you. You dead.");
+                                        jtaDisplay.setText(jtaDisplay.getText()+ "\nIn your greed, you forgot that the devs are mean and this game is unforgiving. The object you were searching in has collapsed and fell on you. You dead.");
                                         for (int j = 0; j < turnCount; j++) {
-                                            userInput = "exit";
+                                            input = "exit";
                                         }
                                     }
                                 } else {
-                                    out.println("Nothing nearby...");
+                                    jtaDisplay.setText(jtaDisplay.getText()+ "\nNothing nearby...");
                                 }
                             } else {
-                                out.println("Nothing nearby...");
+                                jtaDisplay.setText(jtaDisplay.getText()+ "\nNothing nearby...");
                             }
-                        } else if (userInput.equalsIgnoreCase("apple")) {
-                            out.println("Okay. What you're doing there is jumping. You just... you just jumped. \nBut nevermind. Say \'Apple\'. \'Aaaapple\'.");
-                        } else if (userInput.equalsIgnoreCase("Rules") || userInput.equalsIgnoreCase("Instructions")) //gives rules for play
+                        } else if (input.equalsIgnoreCase("apple")) {
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nOkay. What you're doing there is jumping. You just... you just jumped. \nBut nevermind. Say \'Apple\'. \'Aaaapple\'.");
+                        } else if (input.equalsIgnoreCase("Rules") || input.equalsIgnoreCase("Instructions")) //gives rules for play
                         {
-                            System.out.println("To move one of the four directions type up, down, left, or right. \nTo search the tile you are on type search or look. \nYour objective is to escape the series of rooms by gathering clues and tools.");
-                            System.out.println("There may be some secrets hidden within each room, finding them will increase your score.");
-                        } else if (userInput.equalsIgnoreCase("suicide")) //another way to exit 0_0
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nTo move one of the four directions type up, down, left, or right. \nTo search the tile you are on type search or look. \nYour objective is to escape the series of rooms by gathering clues and tools.");
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nThere may be some secrets hidden within each room, finding them will increase your score.");
+                        } else if (input.equalsIgnoreCase("suicide")) //another way to exit 0_0
                         {
-                            System.out.println("You bash your head into the ground until you pass out and die.");
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYou bash your head into the ground until you pass out and die.");
                             for (int j = 0; j < turnCount; j++) {
-                                userInput = "exit";
+                                input = "exit";
                             }
-                        } else if (userInput.equalsIgnoreCase("run")) {
+                        } else if (input.equalsIgnoreCase("run")) {
                             if (runToggle) {
                                 runToggle = false;
-                                out.println("You stop running");
+                                jtaDisplay.setText(jtaDisplay.getText()+ "\nYou stop running");
                             } else {
                                 runToggle = true;
-                                out.println("You start to run");
+                                jtaDisplay.setText(jtaDisplay.getText()+ "\nYou start to run");
                             }
-                        } else if (userInput.equalsIgnoreCase("walk")) {
+                        } else if (input.equalsIgnoreCase("walk")) {
                             runToggle = false;
-                            out.println("You begin to walk");
-                        } else if (userInput.equalsIgnoreCase("help") || userInput.equalsIgnoreCase("let me out")) //easter egg
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYou begin to walk");
+                        } else if (input.equalsIgnoreCase("help") || input.equalsIgnoreCase("let me out")) //easter egg
                         {
-                            out.println("Your cries echo against the cold, unforgiving walls. There is no one to hear them.");
-                        } else if (userInput.equalsIgnoreCase("debug")) //debug values
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nYour cries echo against the cold, unforgiving walls. There is no one to hear them.");
+                        } else if (input.equalsIgnoreCase("debug")) //debug values
                         {
                             //current x/y values
-                            out.println("X: " + currentIntX);
-                            out.println("Y: " + currentIntY);
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nX: " + currentIntX);
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nY: " + currentIntY);
 
-                            out.println(tempRoom); //prints tile's index
+                            jtaDisplay.setText(jtaDisplay.getText() + "\n" + tempRoom); //prints tile's index
 
-                            out.println("Running: " + runToggle);
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nRunning: " + runToggle);
 
-                            out.println("Code: " + code);
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nCode: " + code);
 
-                            out.println("Digits: " + digit0 + " " + digit1 + " " + digit2 + " " + digit3);
-                        } else if (userInput.equalsIgnoreCase("Map")) //temp map for debugging
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nDigits: " + digit0 + " " + digit1 + " " + digit2 + " " + digit3);
+                        } else if (input.equalsIgnoreCase("Map")) //temp map for debugging
                         {
-                            out.println("1 - Empty Space"
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\n1 - Empty Space"
                                     + "\n2 - Door"
                                     + "\n9 - Wall"
                                     + "\n3 - Player"); //key
@@ -564,21 +563,21 @@ public class EscapeGame extends JFrame {
                                 for (int k = 0; k < x; k++) //X
                                 {
                                     if (k == (x - 1)) {
-                                        out.print(room[j][k]); //prints room value for last in line
-                                        out.println(""); //new line
+                                        jtaDisplay.setText(jtaDisplay.getText() + room[j][k]); //prints room value for last in line
+                                        jtaDisplay.setText(jtaDisplay.getText()+ "\n"); //new line
                                     } else {
-                                        out.print(room[j][k]); //prints room value
+                                        jtaDisplay.setText(jtaDisplay.getText() + room[j][k]); //prints room value
                                     }
                                 }
                             }
-                        } else if (!(userInput.equalsIgnoreCase("exit")) && !(userInput.equalsIgnoreCase("exity"))) //handles unrecognized command
+                        } else if (!(input.equalsIgnoreCase("exit")) && !(input.equalsIgnoreCase("exity"))) //handles unrecognized command
                         {
-                            out.println("What was I doing again? I can't remember...");
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nWhat was I doing again? I can't remember...");
                         }
-                        if (tempRoom == 1 && !(userInput.equalsIgnoreCase("exit")) && !(userInput.equalsIgnoreCase("exity"))) {
-                            out.println("Still in the room.");
+                        if (tempRoom == 1 && !(input.equalsIgnoreCase("exit")) && !(input.equalsIgnoreCase("exity"))) {
+                            jtaDisplay.setText(jtaDisplay.getText()+ "\nStill in the room.");
                         }
-                        if (!(userInput.equalsIgnoreCase("exit")) && !(userInput.equalsIgnoreCase("exity"))) //saves room's temp value and allows player to advance w/o affecting that value
+                        if (!(input.equalsIgnoreCase("exit")) && !(input.equalsIgnoreCase("exity"))) //saves room's temp value and allows player to advance w/o affecting that value
                         {
                             room[tempIntY][tempIntX] = tempRoom; //resets room to value saved when tile moved onto
 
